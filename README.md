@@ -1,7 +1,7 @@
 Paper MC Docker Images
 ======================
 
-Dockerfile and script to build and run Paper MC minecraft servers within docker.
+Dockerfile and script to build and run PaperMC minecraft servers within docker.
 
 Building an image
 =================
@@ -45,6 +45,6 @@ Multiple servers
 If you want to run multiple servers, you need to resolve any port conflicts. The port of the internal server can remain 25565, you just need to map it to a different port externally. Here's an example of binding to port 25566 instead of 25565.
 
 ```sh
-docker run -it -p 25566:25565 -v ./ my_server_folder:/srv papermc/1.19.4:latest
+docker run -it -p 25566:25565 -v ./my_server_folder:/srv papermc/1.19.4:latest
 ```
 
