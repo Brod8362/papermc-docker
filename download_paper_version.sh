@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 if [ $# -eq 0 ]; then
 	echo "usage: $0 output_path.jar [paper_version] [paper_build]"
 	exit
@@ -22,7 +23,12 @@ fi
 
 echo "Using build $PAPERMC_BUILD"
 
-DOWNLOAD_NAME=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$papermc_verison/builds/$papermc_build" | jq ".downloads.application.name")
+DOWNLOAD_NAME=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$PAPERMC_VERSION/builds/$PAPERMC_BUILD" | jq ".downloads.application.name")
+
+echo "Using download name $DOWNLOAD_NAME"
+if [ "$DOWNLOAD_NAME" = "null" ]; then 
+	echo "Version $PAPERMC_VERSION not available (download name is null)"
+	exit 1 
+fi
 
 curl "https://api.papermc.io/v2/projects/paper/versions/paper/versions/$PAPERMC_VERSION/builds/$PAPERMC_BUILD/download/$DOWNLOAD_NAME" -o "$1"
-
