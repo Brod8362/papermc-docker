@@ -23,7 +23,7 @@ fi
 
 echo "Using build $PAPERMC_BUILD"
 
-DOWNLOAD_NAME=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$PAPERMC_VERSION/builds/$PAPERMC_BUILD" | jq ".downloads.application.name")
+DOWNLOAD_NAME=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$PAPERMC_VERSION/builds/$PAPERMC_BUILD" | jq ".downloads.application.name" | sed s/\"//g)
 
 echo "Using download name $DOWNLOAD_NAME"
 if [ "$DOWNLOAD_NAME" = "null" ]; then 
@@ -31,4 +31,10 @@ if [ "$DOWNLOAD_NAME" = "null" ]; then
 	exit 1 
 fi
 
-curl "https://api.papermc.io/v2/projects/paper/versions/paper/versions/$PAPERMC_VERSION/builds/$PAPERMC_BUILD/download/$DOWNLOAD_NAME" -o "$1"
+curl "https://api.papermc.io/v2/projects/paper/versions/$PAPERMC_VERSION/builds/$PAPERMC_BUILD/downloads/$DOWNLOAD_NAME" -o "$1"
+
+if [ $? -ne 0 ]; then
+	echo "Failed to download"
+	rm "$1"
+	exit 1
+fi
